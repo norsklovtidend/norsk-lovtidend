@@ -209,3 +209,4 @@ __marimo__/
 .gemini/
 .uv-cache/
 .venv/
+data/http_cache/

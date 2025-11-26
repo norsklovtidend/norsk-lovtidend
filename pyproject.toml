@@ -1,0 +1,28 @@
+[project]
+name = "lovtidend"
+version = "0.1.0"
+description = "Scraper that downloads Norsk Lovtidend XML documents"
+readme = "README.md"
+authors = [
+    { name = "Public servant", email = "" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.14.2",
+    "requests>=2.32.3",
+]
+
+[project.scripts]
+lovtidend = "lovtidend:main"
+
+[build-system]
+requires = ["uv_build>=0.9.7,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.0",
+]
+
+[tool.ruff]
+target-version = "py312"
