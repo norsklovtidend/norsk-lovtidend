@@ -20,6 +20,11 @@
 - Ruff handles linting and formatting (via pre-commit). Prefer incremental `ruff check src tests` during edits; let `ruff format` handle layout.
 - Keep network-facing code polite and explicit: delays, limits, and cache handling should live in the scraper, not scattered helpers.
 
+## Documentation
+- Keep README instructions aligned with the uv wrapper (`./scripts/uv.sh run …`) so new users do not need to manage `VIRTUAL_ENV` manually.
+- Call out safety switches like `--limit`, `--max-pages`, `--start-year`/`--end-year`, and `--no-resume` in usage docs; the scraper defaults to polite, sequential crawling.
+- Remind contributors that `data/` stays untracked and hosts XML downloads, HTTP cache, and checkpoints created at runtime.
+
 ## Testing Guidelines
 - Add `unittest` cases to `tests/` alongside similar scenarios; name files `test_*.py` and ensure deterministic fixtures (e.g., temporary directories).
 - Favor unit-level coverage for pagination, resume logic, caching decisions, and URL generation. Mock HTTP fetches rather than hitting real endpoints.

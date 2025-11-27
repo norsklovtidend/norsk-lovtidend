@@ -23,7 +23,7 @@ the XML versions of every listed document. The project is managed with
 3. Show the CLI options:
 
    ```bash
-   python -m lovtidend --help
+   ./scripts/uv.sh run lovtidend --help
    ```
 
 4. Download a few XML documents into `data/xml` (limits protect Lovdata while
@@ -31,7 +31,7 @@ the XML versions of every listed document. The project is managed with
    the first run may take a little longer while it walks the oldest listings:
 
    ```bash
-   python -m lovtidend --max-pages 1 --limit 20
+   ./scripts/uv.sh run python -m lovtidend --max-pages 1 --limit 20
    ```
 
 Files are stored inside `data/xml`, mirroring the folder structure from the
@@ -48,6 +48,14 @@ unless `--overwrite` is supplied.
 > shell where no other virtual environment is active (or manually unset
 > `VIRTUAL_ENV`).
 
+## CLI switches at a glance
+
+- `--max-pages` / `--limit` bound pagination and total downloads; defaults are unlimited.
+- `--start-year` / `--end-year` constrain the year range; the scraper walks years sequentially from 1982.
+- `--offset` or `--start-url` jump to a specific listing page; `--base-url` overrides the register host for advanced use.
+- `--overwrite` re-downloads XML that already exists; `--output` changes the target folder (default `data/xml`).
+- `--checkpoint-file` relocates progress files; `--no-resume` ignores checkpoints and starts fresh.
+
 ## Checkpoints and resume
 
 - Progress is automatically stored in `data/lovtidend_checkpoint.json`, and the
@@ -55,9 +63,13 @@ unless `--overwrite` is supplied.
 - State is synced before and after every page request, so interruptions in the
   middle of a download pick up from the last page without re-processing earlier
   entries.
+- Pass `--no-resume` to ignore checkpoints entirely or `--checkpoint-file` to
+  keep progress in a different location.
 - Request pacing, jitter, retries, and backoff are handled internally. There is
   no CLI flag to tweak the delay; the scraper already mimics a patient browsing
   session by default.
+- Runtime artifacts (XML downloads, HTTP cache, checkpoints) all live in
+  `data/`, which stays git-ignored.
 
 ## Polite scraping and caching
 
@@ -88,11 +100,19 @@ source .venv/bin/activate
 Then install the git hooks:
 
 ```bash
-pre-commit install
+./scripts/uv.sh run pre-commit install
 ```
 
 Run all checks locally (useful for CI) with:
 
 ```bash
-pre-commit run --all-files
+./scripts/uv.sh run pre-commit run --all-files
+```
+
+## Testing
+
+Unit tests mirror edge cases for pagination, resume, and caching:
+
+```bash
+./scripts/uv.sh run python -m unittest discover
 ```
